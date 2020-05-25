@@ -21,42 +21,35 @@ if ($null -eq $SpeculationControlModule) {
 }
 #endregion Determine if SpeculationControl Module is installed
 
-
-#region Test for the desired log file and create it if not found
+#region Test for the log file path and create it if not found then start the transcript into the log file
 $LogfilePath = "C:\Logs"
-$LogfileName = "SpeculationControl.log"
+$DateTimeStamp = Get-Date -Format FileDateTime
+$LogfileName = "SpeculationControl-"+"$DateTimeStamp.log"
 $Logfile = "$LogfilePath\"+"$LogfileName"
 if (Test-Path $LogfilePath) {
-    if (Test-Path $Logfile) {
-        Start-Transcript -Path "$Logfile" -Append -UseMinimalHeader
-        #$DateTimeStamp | Out-File -FilePath "$Logfile" -Append #-Verbose
-    }
-    else {
-        New-Item -ItemType "File" -Path "$Logfile"
-        Start-Transcript -Path "$Logfile" -Append -UseMinimalHeader
-    }  
-
+    New-Item -ItemType "File" -Path "$Logfile"
+    Start-Transcript -Path "$Logfile" -IncludeInvocationHeader
 } 
 else {
-    New-Item -ItemType "Directory" -Path "$LogfilePath" #-Verbose
+    New-Item -ItemType "Directory" -Path "$LogfilePath"
     New-Item -ItemType "File" -Path $Logfile
-    Start-Transcript -Path "$Logfile" -Append -UseMinimalHeader
+    Start-Transcript -Path "$Logfile" -IncludeInvocationHeader
 }
+#endregion Test for the log file path and create it if not found then start the transcript into the log file
 
-#endregion Test for the desired log file and create it if not found
 
-<#
-To query the state of configurable mitigations:
-#>
-# Save the current execution policy so it can be reset
+#region Save the current execution policy so it can be reset
 $SaveExecutionPolicy = Get-ExecutionPolicy
 Set-ExecutionPolicy RemoteSigned -Scope Currentuser
+#endregion Save the current execution policy so it can be reset
 
-# Check if SpeculationControl Module is imported and import it if not found
+
+#region Check if SpeculationControl Module is imported and import it if not found
 $SpeculatoinControlImported = Get-Module -Name "SpeculationControl"
 if ($null -eq $SpeculatoinControlImported){
     Import-Module SpeculationControl #-Verbose
 }
+#endregion Check if SpeculationControl Module is imported and import it if not found
 
 #Get-SpeculationControlSettings
 
