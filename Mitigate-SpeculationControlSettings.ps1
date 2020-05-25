@@ -21,26 +21,19 @@ if ($null -eq $SpeculationControlModule) {
 }
 #endregion Determine if SpeculationControl Module is installed
 
-
+$DateTimeStamp = Get-Date -Format FileDateTime
 #region Test for the desired log file and create it if not found
 $LogfilePath = "C:\Logs"
-$LogfileName = "SpeculationControl.log"
+$LogfileName = "SpeculationControl-"+"$DateTimeStamp.log"
 $Logfile = "$LogfilePath\"+"$LogfileName"
 if (Test-Path $LogfilePath) {
-    if (Test-Path $Logfile) {
-        Start-Transcript -Path "$Logfile" -Append -UseMinimalHeader
-        #$DateTimeStamp | Out-File -FilePath "$Logfile" -Append #-Verbose
-    }
-    else {
-        New-Item -ItemType "File" -Path "$Logfile"
-        Start-Transcript -Path "$Logfile" -Append -UseMinimalHeader
-    }  
-
+    New-Item -ItemType "File" -Path "$Logfile"
+    Start-Transcript -Path "$Logfile" -UseMinimalHeader
 } 
 else {
     New-Item -ItemType "Directory" -Path "$LogfilePath" #-Verbose
     New-Item -ItemType "File" -Path $Logfile
-    Start-Transcript -Path "$Logfile" -Append -UseMinimalHeader
+    Start-Transcript -Path "$Logfile" -UseMinimalHeader
 }
 
 #endregion Test for the desired log file and create it if not found
