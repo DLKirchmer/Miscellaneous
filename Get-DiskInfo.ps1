@@ -16,22 +16,22 @@ if ( -Not (Test-Path $ExportFilePath)) {
 #endregion Test for the desired log file and create it if not found
 
 
-
-#$PSDisks = Get-Disk
-#$PSDrives = Get-PSDrive -PSProvider FileSystem
+<# 
+$PSDisks = Get-Disk
+$PSDrives = Get-PSDrive -PSProvider FileSystem
 $PSPhysicalDisks = Get-PhysicalDisk
 $WmiLogicalDisks = Get-CimInstance -ClassName Win32_LogicalDisk
 $WmiDrives = Get-CimInstance -ClassName Win32_DiskDrive
 $WmiDiskPartitions = Get-CimInstance -ClassName Win32_DiskPartition
-
-$WmiLogicalDisks | Get-member
+ #>
+#$WmiLogicalDisks | Get-member
 
 
 #region PSDisks
-$PSDisks = Get-Disk
-$PSDisks | Select-Object -Property DiskNumber, FriendlyName, PartitionStyle, BusType, AllocatedSize, @{L = 'Size GB'; E = { "{0:N2}" -f (($_.Size) / 1GB) } } | Sort-Object -Property DiskNumber  |  Out-GridView
 $ExportFileName = "PSDisksInfo-$DateTime.xlsx"
 $ExportFile = "$ExportFilePath\" + "$ExportFileName"
+$PSDisks = Get-Disk
+$PSDisks | Select-Object -Property DiskNumber, FriendlyName, PartitionStyle, BusType, AllocatedSize, @{L = 'Size GB'; E = { "{0:N2}" -f (($_.Size) / 1GB) } } | Sort-Object -Property DiskNumber  |  Out-GridView
 $PSDisks | Export-Excel -Path $ExportFile -AutoSize
 $PSDisksIndexMax = ($PSDisks.Count - 1)
 $PSDisksIndexes = 0..$PSDisksIndexMax
@@ -47,10 +47,10 @@ $PSDisksTotalStorage
 #endregion PSDisks
 
 #region PSDrives
-$PSDrives = Get-PSDrive -PSProvider FileSystem
-$PSDrives | Select-Object -Property * #Name, Root, @{L = 'Size'; E = { "{0:N0}" -f ($_.Used + $_.Free) } }, @{L = 'Size GB'; E = { "{0:N2}" -f (($_.Used + $_.Free)/1GB) } }, @{L = 'Used GB'; E = { "{0:N2}" -f (($_.Used)/1GB) } }, @{L = 'Free GB'; E = { "{0:N2}" -f (($_.Free)/1GB) } }, Description  |  Out-GridView
 $ExportFileName = "PSDrivesInfo-$DateTime.xlsx"
 $ExportFile = "$ExportFilePath\" + "$ExportFileName"
+$PSDrives = Get-PSDrive -PSProvider FileSystem
+$PSDrives | Select-Object -Property * #Name, Root, @{L = 'Size'; E = { "{0:N0}" -f ($_.Used + $_.Free) } }, @{L = 'Size GB'; E = { "{0:N2}" -f (($_.Used + $_.Free)/1GB) } }, @{L = 'Used GB'; E = { "{0:N2}" -f (($_.Used)/1GB) } }, @{L = 'Free GB'; E = { "{0:N2}" -f (($_.Free)/1GB) } }, Description  |  Out-GridView
 $PSDrives | Export-Excel -Path $ExportFile -AutoSize
 $PSDrivesIndexMax = ($PSDrives.Count - 1)
 $PSDrivesIndexes = 0..$PSDrivesIndexMax
@@ -66,7 +66,7 @@ foreach ($PSDrivesIndex in $PSDrivesIndexes) {
 $PSDrivesTotalStorage
 #endregion PSDrives
 
-$PSDrives | Get-Member
+#$PSDrives | Get-Member
 
 
 
