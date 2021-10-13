@@ -4,7 +4,7 @@ $DateTime = Get-Date -Format FileDateTime
 $DateTime
 
 #region Test if Export file folder exists and create it if not found.
-$ExportFilePath = "E:\Logs\DiskInfo"
+$ExportFilePath = "D:\Logs\DiskInfo"
 $ExportFileName = "DiskInfo-$DateTime.xlsx"
 $ExportFile = "$ExportFilePath\" + "$ExportFileName"
 
@@ -16,14 +16,14 @@ if ( -Not (Test-Path $ExportFilePath)) {
 #endregion Test for the desired log file and create it if not found
 
 
-<# 
+ 
 $PSDisks = Get-Disk
 $PSDrives = Get-PSDrive -PSProvider FileSystem
 $PSPhysicalDisks = Get-PhysicalDisk
 $WmiLogicalDisks = Get-CimInstance -ClassName Win32_LogicalDisk
 $WmiDrives = Get-CimInstance -ClassName Win32_DiskDrive
 $WmiDiskPartitions = Get-CimInstance -ClassName Win32_DiskPartition
- #>
+
 #$WmiLogicalDisks | Get-member
 
 
@@ -94,12 +94,12 @@ $WmiDiskPartitions | Export-Excel -Path $ExportFile -AutoSize
 $PSDrivesIndexMax = ($PSDrives.Count - 1)
 $PSDrivesIndexes = 0..$PSDrivesIndexMax
 $null = $TotalAvailableStorage
-#$TotalAttachedStorage = @()
+$TotalAttachedStorage = @()
 $DriveSizeGB = New-Object System.UInt64
 foreach ($PSDisksIndex in $PSDisksIndexes) {
     $DriveSize = $PSDisks.Size[$PSDisksIndex] 
     $DriveSizeGB = $DriveSize / 1Gb
-    #$TotalAttachedStorage += $DriveSizeGB
+    $TotalAttachedStorage += $DriveSizeGB
     $TotalAvailableStorage = $TotalAvailableStorage + $DriveSizeGB
 }
 
@@ -120,7 +120,7 @@ $WmiDiskPartitions.Size
 $TotalAvailableStorage
 
 
-
+<#
 Get-Help Export-Excel
 Get-InstalledModule
 Get-Module -ListAvailable
@@ -128,7 +128,8 @@ Get-Module -ListAvailable
 import-module ImportExcel
 
 Find-Module -Name ImportExcel | Install-Module
-djdjd
+#>
+
 <#
 $DriveSizeGB.GetType()
 
