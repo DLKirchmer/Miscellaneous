@@ -22,7 +22,7 @@ if ($null -eq $SpeculationControlModule) {
 #endregion Determine if SpeculationControl Module is installed
 
 #region Test for the log file path and create it if not found then start the transcript into the log file
-$LogfilePath = "C:\Logs"
+$LogfilePath = "D:\Logs"
 $DateTimeStamp = Get-Date -Format FileDateTime
 $LogfileName = "SpeculationControl-"+"$DateTimeStamp.log"
 $Logfile = "$LogfilePath\"+"$LogfileName"
