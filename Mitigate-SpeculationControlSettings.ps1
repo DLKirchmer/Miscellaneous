@@ -38,7 +38,7 @@
 
 
 #region Test for the log file path and create it if not found then start the transcript into the log file
-$LogfilePath = "C:\Logs"
+$LogfilePath = "D:\Logs"
 $DateTimeStamp = Get-Date -Format FileDateTime
 $LogfileName = "SpeculationControl-"+"$DateTimeStamp.log"
 $Logfile = "$LogfilePath\"+"$LogfileName"
@@ -131,6 +131,7 @@ $SpeculationControlResultsBefore          #Displays to console so Transcript wil
 if ($SpeculationControlResults.SSBDWindowsSupportEnabledSystemWide -ne "True"){
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 72 /f
     reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization" /v MinVmVersionForCpuBasedMitigations /t REG_SZ /d "1.0" /f
 }
 #endregion Mitigate "Windows OS support for speculative store bypass disable is enabled system-wide: False" vulnerability
 
