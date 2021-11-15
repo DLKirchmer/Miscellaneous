@@ -38,9 +38,9 @@
 
 
 #region Test for the log file path and create it if not found then start the transcript into the log file
-$LogfilePath = "D:\Logs"
+$LogfilePath = "C:\Logs"
 $DateTimeStamp = Get-Date -Format FileDateTime
-$LogfileName = "SpeculationControl-"+"$DateTimeStamp.log"
+$LogfileName = "Mitigate_SpeculationControl_"+"$env:computername"+"_$DateTimeStamp.log"
 $Logfile = "$LogfilePath\"+"$LogfileName"
 if (Test-Path $LogfilePath) {
     New-Item -ItemType "File" -Path "$Logfile"
@@ -60,7 +60,13 @@ Set-ExecutionPolicy RemoteSigned -Scope Currentuser
 #endregion Save the current execution policy so it can be reset
 
 #region Backup the registry keys for recovery, if needed.
-REG EXPORT "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" $RegKeysFile
+
+$RegKeysFileName = "Prefix_SpeculationControl_RegKeys_"+"$env:computername"+"_$DateTimeStamp.reg"
+$RegKeysFile = "$LogfilePath\"+"$RegKeysFileName"
+
+$RegKeysMM = REG EXPORT "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" 
+$RegKeysVM = REG EXPORT "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"
+$RegKeysFile
 #endregion Backup the registry keys for recovery, if needed.
 
 
